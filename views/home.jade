@@ -5,4 +5,12 @@ block content
   div(ng-app='whereIsCaioKF')
     div(ng-controller='AppController' ng-cloak)
         map#itinerary-map(street-view-control='false', map-type-control='false', zoom='2')
-          marker(ng-repeat='item in itinerary track by $index', position='{{item}}', title='{{item}}')
+          marker(
+            id='marker-{{$index}}',
+            ng-repeat='item in itinerary track by $index',
+            position='{{item.latLong}}',
+            title='{{item.description}}'
+            on-click='showInfo(event, item.description)'
+          )
+          info-window(id='info')
+            div {{info}}
