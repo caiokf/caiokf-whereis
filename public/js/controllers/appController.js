@@ -39,15 +39,15 @@ angular.module('whereIsCaioKF', ['ngMap']).
 
     $scope.$watch('itinerary', function (newValue, oldValue) {
       if (newValue.length > 0) {
-        WeatherService.get(newValue[0].latLong, function(response) {
+        $scope.current = newValue[newValue.length - 1];
+
+        WeatherService.get($scope.current.latLong, function(response) {
           $scope.weather = {
             temperature: response.query.results.channel.item.condition.temp,
             condition: response.query.results.channel.item.condition.text,
             code: response.query.results.channel.item.condition.code,
           };
         });
-
-        $scope.current = newValue[0];
       }
     });
   })
