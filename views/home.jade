@@ -28,7 +28,7 @@ block content
           marker(
             id='marker-{{$index}}', 
             ng-repeat='item in itinerary track by $index', 
-            position='{{item.latLng}}',
+            position='{{item.latLng}}', 
             title='{{item.description}}'
             on-click='showInfo(event, item.description)'
           )
