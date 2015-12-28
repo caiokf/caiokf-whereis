@@ -41,7 +41,7 @@ angular.module('whereIsCaioKF', ['ngMap']).
       if (newValue.length > 0) {
         $scope.current = newValue[newValue.length - 1];
 
-        WeatherService.get($scope.current.latLong, function(response) {
+        WeatherService.get($scope.current.description, function(response) {
           $scope.weather = {
             temperature: response.query.results.channel.item.condition.temp,
             condition: response.query.results.channel.item.condition.text,
@@ -55,7 +55,7 @@ angular.module('whereIsCaioKF', ['ngMap']).
   .service('WeatherService', function($http, $q) {
     return {
       get: function(location, success) {
-        var locationQuery = escape("select item from weather.forecast where woeid in (select woeid from geo.places(1) where text='Porto Alegre, Brazil') and u='c'");
+        var locationQuery = escape("select item from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + location + "') and u='c'");
         var locationUrl = "https://query.yahooapis.com/v1/public/yql?q=" + locationQuery + "&format=json";
 
         var request = $http({
