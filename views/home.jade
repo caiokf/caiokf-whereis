@@ -28,9 +28,10 @@ block content
           marker(
             id='marker-{{$index}}', 
             ng-repeat='item in itinerary track by $index', 
-            position='{{item.latLong}}', 
+            position='{{item.latLng}}',
             title='{{item.description}}'
             on-click='showInfo(event, item.description)'
           )
+          shape(name='polyline' path="{{path()}}" geodesic="true" stroke-color="#FF0000" stroke-opacity="1.0" stroke-weight="2")
           info-window(id='info')
             div {{info}}

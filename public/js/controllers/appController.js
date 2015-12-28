@@ -10,8 +10,8 @@ angular.module('whereIsCaioKF', ['ngMap']).
       $scope.itinerary = _.map(data, function(item) {
         return {
           'lat': item.Lat,
-          'long': item.Long,
-          'latLong': item.Lat + ',' + item.Long,
+          'lng': item.Long,
+          'latLng': item.Lat + ',' + item.Long,
           'description': item.Location + ', ' + item.Country,
           'date': item.Date
         };
@@ -31,6 +31,12 @@ angular.module('whereIsCaioKF', ['ngMap']).
     $scope.showInfo = function(evt, text) {
       $scope.info = text;
       $scope.map.showInfoWindow('info', this);
+    };
+
+    $scope.path = function () {
+      return $scope.itinerary.map(function(location) {
+        return [location.lat,location.lng];
+      });
     };
 
     $scope.showCurrentLocationInfo = function() {
