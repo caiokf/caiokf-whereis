@@ -2,6 +2,28 @@ angular.module('whereIsCaioKF', ['ngMap']).
   
   controller('AppController', function ($scope, NgMap, WeatherService) {
 
+    var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheet/pub?hl=en_US&hl=en_US&key=1ujZWyJk4CftjJtZqPINWhbtKwCBR8QMQ2d3uMoK7zvU&output=html';
+
+    $scope.itinerary = [];
+
+    $scope.readSpreadsheet = function(data, tabletop) {
+      $scope.itinerary = _.map(data, function(item) {
+        return {
+          'lat': item.Lat,
+          'long': item.Long,
+          'latLong': item.Lat + ',' + item.Long,
+          'description': item.Location + ', ' + item.Country,
+          'date': item.Date
+        };
+      })
+    };
+
+    Tabletop.init({ 
+      key: publicSpreadsheetUrl,
+      callback: $scope.readSpreadsheet,
+      simpleSheet: true 
+    });
+
     NgMap.getMap().then(function(map) {
       $scope.map = map;
     });
@@ -11,20 +33,18 @@ angular.module('whereIsCaioKF', ['ngMap']).
       $scope.map.showInfoWindow('info', this);
     };
 
-    $scope.itinerary = [
-      {latLong: '-30.0331, -51.2300', description: 'Porto Alegre, Brazil'},
-      {latLong: '46.2000, 6.1500', description: 'Geneva, Switzerland'},
-      {latLong: '38.6431, 34.8289', description: 'Goreme, Turkey'},
-    ];
+    $scope.$watch('itinerary', function (newValue, oldValue) {
+      if (newValue.length > 0) {
+        WeatherService.get(newValue[0].latLong, function(response) {
+          $scope.weather = {
+            temperature: response.main.temp,
+            condition: response.weather[0].description,
+            icon: response.weather[0].icon
+          };
+        });
 
-    $scope.current = $scope.itinerary[0];
-
-    WeatherService.get($scope.itinerary[0].latLong, function(response) {
-      $scope.weather = {
-        temperature: response.main.temp,
-        condition: response.weather[0].description,
-        icon: response.weather[0].icon
-      };
+        $scope.current = newValue[0];
+      }
     });
   })
 
