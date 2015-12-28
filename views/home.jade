@@ -24,7 +24,7 @@ block content
                 | {{weather.temperature}}C  - {{weather.condition}}
 
       .container-fluid
-        map#itinerary-map(street-view-control='false', map-type-control='false', zoom='2')
+        map#itinerary-map(street-view-control='false', map-type-control='false', zoom='3' center="17, 5")
           marker(
             id='marker-{{$index}}', 
             ng-repeat='item in itinerary track by $index', 
