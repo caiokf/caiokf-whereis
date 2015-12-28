@@ -16,11 +16,11 @@ block content
               i.icon-globe
               | Where in the world is&nbsp;
               b CaioKF ?
-            span.current-location
-              | {{current.description}}
-            span.current-weather
-              | {{weather.temperature}} C
-              | {{weather.condition}}
+            div.current-location(ng-hide='!showCurrentLocationInfo()')
+              span.description
+                | Currently in: {{current.description}}
+              span.weather
+                | {{weather.temperature}}C  - {{weather.condition}}
 
       .container-fluid
         map#itinerary-map(street-view-control='false', map-type-control='false', zoom='2')

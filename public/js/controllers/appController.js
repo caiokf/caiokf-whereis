@@ -33,6 +33,10 @@ angular.module('whereIsCaioKF', ['ngMap']).
       $scope.map.showInfoWindow('info', this);
     };
 
+    $scope.showCurrentLocationInfo = function() {
+      return $scope.itinerary.length > 0;
+    };
+
     $scope.$watch('itinerary', function (newValue, oldValue) {
       if (newValue.length > 0) {
         WeatherService.get(newValue[0].latLong, function(response) {
