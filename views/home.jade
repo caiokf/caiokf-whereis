@@ -1,0 +1,8 @@
+extends layout
+
+block content
+
+  div(ng-app='whereIsCaioKF')
+    div(ng-controller='AppController' ng-cloak)
+        map#itinerary-map(street-view-control='false', map-type-control='false', zoom='2')
+          marker(ng-repeat='item in itinerary track by $index', position='{{item}}', title='{{item}}')
