@@ -4,6 +4,25 @@ block content
 
   div(ng-app='whereIsCaioKF')
     div(ng-controller='AppController' ng-cloak)
+      .navbar.navbar-default.navbar-fixed-top
+        .container
+          .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+              span.sr-only Where in the world is CaioKF ?
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href='/')
+              i.icon-globe
+              | Where in the world is&nbsp;
+              b CaioKF ?
+            span.current-location
+              | {{current.description}}
+            span.current-weather
+              | {{weather.temperature}} C
+              | {{weather.condition}}
+
+      .container-fluid
         map#itinerary-map(street-view-control='false', map-type-control='false', zoom='2')
           marker(
             id='marker-{{$index}}', 
