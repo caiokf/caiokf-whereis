@@ -28,6 +28,14 @@ angular.module('whereIsCaioKF', ['ngMap']).
       $scope.map = map;
     });
 
+    $scope.mapIcon = function(index) {
+      if (index === $scope.itinerary.length - 1) {
+        return 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+      }
+
+      return 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+    };
+
     $scope.showInfo = function(evt, text) {
       $scope.info = text;
       $scope.map.showInfoWindow('info', this);
