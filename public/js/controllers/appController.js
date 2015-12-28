@@ -56,7 +56,7 @@ angular.module('whereIsCaioKF', ['ngMap']).
     return {
       get: function(location, success) {
         var locationQuery = escape("select item from weather.forecast where woeid in (select woeid from geo.places(1) where text='Porto Alegre, Brazil') and u='c'");
-        var locationUrl = "http://query.yahooapis.com/v1/public/yql?q=" + locationQuery + "&format=json";
+        var locationUrl = "https://query.yahooapis.com/v1/public/yql?q=" + locationQuery + "&format=json";
 
         var request = $http({
           method: "get",
