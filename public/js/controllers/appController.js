@@ -41,9 +41,9 @@ angular.module('whereIsCaioKF', ['ngMap']).
       if (newValue.length > 0) {
         WeatherService.get(newValue[0].latLong, function(response) {
           $scope.weather = {
-            temperature: response.main.temp,
-            condition: response.weather[0].description,
-            icon: response.weather[0].icon
+            temperature: response.query.results.channel.item.condition.temp,
+            condition: response.query.results.channel.item.condition.text,
+            code: response.query.results.channel.item.condition.code,
           };
         });
 
@@ -55,11 +55,14 @@ angular.module('whereIsCaioKF', ['ngMap']).
   .service('WeatherService', function($http, $q) {
     return {
       get: function(location, success) {
+        var locationQuery = escape("select item from weather.forecast where woeid in (select woeid from geo.places(1) where text='Porto Alegre, Brazil') and u='c'");
+        var locationUrl = "http://query.yahooapis.com/v1/public/yql?q=" + locationQuery + "&format=json";
+
         var request = $http({
           method: "get",
-          url: "http://api.openweathermap.org/data/2.5/weather?units=metric&lat=-30.0331&lon=-51.2300&APPID=109b44c8463191b5251c660e9b61a47b",
+          url: locationUrl,
         });
-        
+
         return(request.then(
           function (response) { 
             return success(response.data); 
