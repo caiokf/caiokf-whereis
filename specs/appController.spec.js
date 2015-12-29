@@ -90,4 +90,18 @@ describe('App Controller', function() {
       expect(scope.map.showInfoWindow.called).to.equal(true);
     });
   });
+
+  describe('locations google spreadsheet', function() {
+    it('should set itinerary contents from spreadsheet', function() {
+      scope.readSpreadsheet([{ Lat: 1, Long: 2, Location: 'City', Country: 'Brazil', Date: undefined }]);
+
+      expect(scope.itinerary).to.deep.equal([{
+        'lat': 1,
+        'lng': 2,
+        'latLng': '1,2',
+        'description': 'City, Brazil',
+        'date': undefined
+      }]);
+    });
+  });
 });
