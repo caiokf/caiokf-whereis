@@ -69,4 +69,14 @@ describe('App Controller', function() {
       mock.verify();
     });
   });
+
+  describe('route polyline', function() {
+    it('should be an array of coordinates from itinerary', function() {
+      scope.itinerary.push({ lat: 1, lng: 2});
+      expect(scope.routePolylinePath()).to.deep.equal([[1,2]]);
+
+      scope.itinerary.push({ lat: 3, lng: 4});
+      expect(scope.routePolylinePath()).to.deep.equal([[1,2],[3,4]]);
+    });
+  });
 });
