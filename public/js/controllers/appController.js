@@ -41,9 +41,13 @@ angular.module('whereIsCaioKF', ['ngMap']).
       $scope.map.showInfoWindow('info', this);
     };
 
-    $scope.path = function () {
+    $scope.showMarkers = function() {
+      return true;
+    };
+
+    $scope.routePolylinePath = function () {
       return $scope.itinerary.map(function(location) {
-        return [location.lat,location.lng];
+        return [location.lat, location.lng];
       });
     };
 
@@ -63,7 +67,7 @@ angular.module('whereIsCaioKF', ['ngMap']).
           };
         });
       }
-    });
+    }, true);
   })
 
   .service('WeatherService', function($http, $q) {

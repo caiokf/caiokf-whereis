@@ -31,8 +31,9 @@ block content
             position='{{item.latLng}}', 
             title='{{item.description}}',
             on-click='showInfo(event, item.description)',
-            icon='{{mapIcon($index)}}'
+            icon='{{mapIcon($index)}}',
+            visible='{{showMarkers()}}'
           )
-          shape(name='polyline' path="{{path()}}" geodesic="true" stroke-color="#FF0000" stroke-opacity="1.0" stroke-weight="2")
+          shape(name='polyline' path="{{routePolylinePath()}}" geodesic="true" stroke-color="#FF0000" stroke-opacity="1.0" stroke-weight="2")
           info-window(id='info')
             div {{info}}
