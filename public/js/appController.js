@@ -1,6 +1,6 @@
-angular.module('whereIsCaioKF', ['ngMap']).
-  
-  controller('AppController', function ($scope, NgMap, WeatherService, GoogleSpreadsheetService) {
+angular.module('whereIsCaioKF')
+
+  .controller('AppController', function ($scope, NgMap, WeatherService, GoogleSpreadsheetService) {
 
     $scope.itinerary = [];
 
@@ -17,7 +17,7 @@ angular.module('whereIsCaioKF', ['ngMap']).
     };
 
     GoogleSpreadsheetService.get($scope.readSpreadsheet);
-
+    
     NgMap.getMap().then(function(map) {
       $scope.map = map;
     });
@@ -62,42 +62,4 @@ angular.module('whereIsCaioKF', ['ngMap']).
         });
       }
     }, true);
-  })
-
-  .service('GoogleSpreadsheetService', function($http, $q) {
-    var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheet/pub?hl=en_US&hl=en_US&key=1ujZWyJk4CftjJtZqPINWhbtKwCBR8QMQ2d3uMoK7zvU&output=html';
-
-    return {
-      get: function(successCallback) {
-        Tabletop.init({
-          key: publicSpreadsheetUrl,
-          callback: successCallback,
-          simpleSheet: true
-        });
-      }
-    };
-  })
-
-
-  .service('WeatherService', function($http, $q) {
-    return {
-      get: function(location, success) {
-        var locationQuery = escape("select item from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + location + "') and u='c'");
-        var locationUrl = "https://query.yahooapis.com/v1/public/yql?q=" + locationQuery + "&format=json";
-
-        var request = $http({
-          method: "get",
-          url: locationUrl,
-        });
-
-        return(request.then(
-          function (response) { 
-            return success(response.data); 
-          }, 
-          function (response) {
-            console.log(response);
-          }
-        ));
-      }
-    };
   });

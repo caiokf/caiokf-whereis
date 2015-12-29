@@ -1,1 +1,1 @@
-angular.module('whereIsCaioKF', ['ngMap', 'ngRoute']);
+angular.module('whereIsCaioKF', ['ngMap']);
