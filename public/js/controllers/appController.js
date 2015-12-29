@@ -1,8 +1,6 @@
 angular.module('whereIsCaioKF', ['ngMap']).
   
-  controller('AppController', function ($scope, NgMap, WeatherService) {
-
-    var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheet/pub?hl=en_US&hl=en_US&key=1ujZWyJk4CftjJtZqPINWhbtKwCBR8QMQ2d3uMoK7zvU&output=html';
+  controller('AppController', function ($scope, NgMap, WeatherService, GoogleSpreadsheetService) {
 
     $scope.itinerary = [];
 
@@ -18,11 +16,7 @@ angular.module('whereIsCaioKF', ['ngMap']).
       })
     };
 
-    Tabletop.init({ 
-      key: publicSpreadsheetUrl,
-      callback: $scope.readSpreadsheet,
-      simpleSheet: true 
-    });
+    GoogleSpreadsheetService.get($scope.readSpreadsheet);
 
     NgMap.getMap().then(function(map) {
       $scope.map = map;
@@ -70,6 +64,21 @@ angular.module('whereIsCaioKF', ['ngMap']).
     }, true);
   })
 
+  .service('GoogleSpreadsheetService', function($http, $q) {
+    var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheet/pub?hl=en_US&hl=en_US&key=1ujZWyJk4CftjJtZqPINWhbtKwCBR8QMQ2d3uMoK7zvU&output=html';
+
+    return {
+      get: function(successCallback) {
+        Tabletop.init({
+          key: publicSpreadsheetUrl,
+          callback: successCallback,
+          simpleSheet: true
+        });
+      }
+    };
+  })
+
+
   .service('WeatherService', function($http, $q) {
     return {
       get: function(location, success) {
@@ -90,5 +99,5 @@ angular.module('whereIsCaioKF', ['ngMap']).
           }
         ));
       }
-    }
+    };
   });
