@@ -20,12 +20,10 @@ describe('App Controller', function() {
       WeatherService.get = sinon.stub();
 
       scope.itinerary.push('first-location');
-      scope.$apply();
-      expect(scope.current).to.equal('first-location');
+      expect(scope.current()).to.equal('first-location');
 
       scope.itinerary.push('second-location');
-      scope.$apply();
-      expect(scope.current).to.equal('second-location');
+      expect(scope.current()).to.equal('second-location');
     });
 
     it('should not show current location information when itinerary is empty', function() {
@@ -36,6 +34,21 @@ describe('App Controller', function() {
     it('should show current location information when itinerary is not empty', function() {
       scope.itinerary = ['some-location'];
       expect(scope.showCurrentLocationInfo()).to.equal(true);
+    });
+
+    it('should have a readable last updated date', function () {
+      var date = new Date();
+      var lastYearDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getFullYear() - 1);
+
+      scope.itinerary = [{ date: lastYearDate }];
+
+      expect(scope.lastUpdatedDate()).to.equal('a year ago');
+    });
+
+    it('last updated date should be empty when there are no itinerary locations', function () {
+      scope.itinerary = [];
+
+      expect(scope.lastUpdatedDate()).to.be.empty;
     });
   });
 

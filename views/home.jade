@@ -23,7 +23,7 @@ block content
                 i(class="ywicon wi-yw-{{weather.code}}")&nbsp;
                 | {{weather.temperature}}&deg;C&nbsp; {{weather.condition}}
               span.last-updated
-                | Last Updated On: {{current.date}}
+                | Last Updated: {{lastUpdatedDate()}}
 
       .container-fluid
         map#itinerary-map(street-view-control='false', map-type-control='false', zoom='3' center="17, 5")

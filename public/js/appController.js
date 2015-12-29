@@ -49,11 +49,24 @@ angular.module('whereIsCaioKF')
       return $scope.itinerary.length > 0;
     };
 
+    $scope.lastUpdatedDate = function() {
+      if ($scope.itinerary.length > 0) {
+        return moment($scope.current().date, 'DD/MM/YYYY').fromNow();
+      }
+      
+      return '';
+    };
+
+    $scope.current = function () {
+      if ($scope.itinerary.length > 0) {
+        return $scope.itinerary[$scope.itinerary.length - 1];
+      }
+      return undefined;
+    };
+
     $scope.$watch('itinerary', function (newValue, oldValue) {
       if (newValue.length > 0) {
-        $scope.current = newValue[newValue.length - 1];
-
-        WeatherService.get($scope.current.description, function(response) {
+        WeatherService.get($scope.current().description, function(response) {
           $scope.weather = {
             temperature: response.query.results.channel.item.condition.temp,
             condition: response.query.results.channel.item.condition.text,
