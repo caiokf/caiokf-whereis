@@ -17,7 +17,7 @@ describe('App Controller', function() {
 
   describe('current location', function() {
     it('should be last item on itinerary', function() {
-      WeatherService.get = function() {};
+      WeatherService.get = sinon.stub();
 
       scope.itinerary.push('first-location');
       scope.$apply();
