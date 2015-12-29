@@ -57,4 +57,16 @@ describe('App Controller', function() {
       expect(scope.showMarkers()).to.equal(true);
     });
   });
+
+  describe('weather', function() {
+    it('should call weather service when itinerary changes', function() {
+      var mock = sinon.mock(WeatherService);
+      mock.expects('get').once();
+
+      scope.itinerary.push('any-location-should-trigger-weather-service');
+      scope.$apply();
+
+      mock.verify();
+    });
+  });
 });
