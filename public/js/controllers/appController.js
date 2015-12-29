@@ -37,7 +37,7 @@ angular.module('whereIsCaioKF', ['ngMap']).
     };
 
     $scope.showInfo = function(evt, text) {
-      $scope.info = text;
+      $scope.infoWindowContent = text;
       $scope.map.showInfoWindow('info', this);
     };
 

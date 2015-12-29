@@ -79,4 +79,15 @@ describe('App Controller', function() {
       expect(scope.routePolylinePath()).to.deep.equal([[1,2],[3,4]]);
     });
   });
+
+  describe('map info window', function() {
+    it('should change window content', function() {
+      scope.map = { showInfoWindow: sinon.spy() };
+
+      scope.showInfo({}, 'some info window text');
+
+      expect(scope.infoWindowContent).to.equal('some info window text');
+      expect(scope.map.showInfoWindow.called).to.equal(true);
+    });
+  });
 });
