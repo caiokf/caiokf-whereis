@@ -2,6 +2,9 @@
   "name": "whereis-caiokf",
   "description": "Where in the world is CaioKF",
   "version": "0.0.1",
+  "engines": {
+    "node": "0.10.31"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/caiokf/caiokf-whereis"
