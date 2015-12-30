@@ -40,6 +40,14 @@
   "license": "MIT",
   "devDependencies": {
     "angular-mocks": "^1.4.8",
+    "karma": "^0.13.10",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^0.2.0",
+    "karma-mocha-reporter": "^1.1.1",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "mocha": "^2.3.3",
+    "phantomjs": "^1.9.18",
+    "sinon": "^1.17.1",
     "chai": "^3.4.1"
   }
 }
