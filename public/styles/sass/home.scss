@@ -42,7 +42,29 @@ body {
   width: 100%;
 }
 
-div.gmnoprint { margin-top: -30px; }
+circle {
+  fill: rgba(156,175,99,0.2);
+  stroke: white;
+  stroke-width: 0.3px;
+}
+
+path.arc {
+  pointer-events: none;
+  fill: none;
+  stroke: rgba(255, 84, 93, 0.8);
+  stroke-width: 3px;
+}
+
+// .graticule {
+//   fill: none;
+//   stroke: #777;
+//   stroke-width: .5px;
+//   stroke-opacity: .5;
+// }
+
+.land {
+  fill: #222;
+}
 
 .current-location {
   display: inline-block;
@@ -54,7 +76,7 @@ div.gmnoprint { margin-top: -30px; }
   .weather {
     margin-left: 30px;
   }
-  
+
   .last-updated {
     margin-left: 30px;
     font-size: 11px;
