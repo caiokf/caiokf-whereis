@@ -18,7 +18,7 @@ block content
               b CaioKF ?
             div.current-location(ng-hide='!showCurrentLocationInfo()')
               span.description
-                | Currently in: {{current.description}}
+                | Currently in: {{current().description}}
               span.weather
                 i(class="ywicon wi-yw-{{weather.code}}")&nbsp;
                 | {{weather.temperature}}&deg;C&nbsp; {{weather.condition}}
