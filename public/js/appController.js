@@ -3,6 +3,9 @@ angular.module('whereIsCaioKF')
   .controller('AppController', function ($scope, NgMap, WeatherService, GoogleSpreadsheetService) {
 
     $scope.itinerary = [];
+    
+    var width = 960,
+    height = 960;
 
     $scope.readSpreadsheet = function(data, tabletop) {
       $scope.itinerary = _.map(data, function(item) {
@@ -13,31 +16,66 @@ angular.module('whereIsCaioKF')
           'description': item.Location + ', ' + item.Country,
           'date': item.Date
         };
-      })
+      });
+
+      var arc = d3.geo.greatArc()
+        .source(function(d) { return [d.source.lat, d.source.lng]; })
+        .target(function(d) { return [d.target.lat, d.target.lng]; });
+
+      var projection = d3.geo.mercator()
+        .scale((width + 1) / 2 / Math.PI)
+        .translate([width / 2, height / 2])
+        .precision(.1);
+
+      var path = d3.geo.path()
+          .projection(projection);
+
+      var graticule = d3.geo.graticule();
+
+      var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 15]);
+
+      var svg = d3.select("#itinerary-map").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+      svg.append("path")
+          .datum(graticule)
+          .attr("class", "graticule")
+          .attr("d", path);
+
+      d3.json("/js/lib/world.json", function(error, world) {
+        
+        svg.insert("path", ".graticule")
+          .datum(topojson.feature(world, world.objects.land))
+          .attr("class", "land")
+          .attr("d", path);
+
+        svg.insert("path", ".graticule")
+          .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+          .attr("class", "boundary")
+          .attr("d", path);
+
+        svg.selectAll(".pin")
+          .data($scope.itinerary)
+        .enter().append("circle", ".pin")
+          .attr("r", 10)
+          .attr("transform", function(d) {
+            return "translate(" + projection([d.lng, d.lat]) + ")";
+          });
+
+        svg.selectAll("path.arc")
+          .data([
+            { source: { lat: 50.123, lng: 0.7892 }, target: { lat: 0.1230, lng: 50.792 } } 
+          ])
+        .enter().append("svg:path")
+          .attr("class", "arc")
+          .attr("d", function(d) { return path(arc(d)); });
+        });
     };
 
     GoogleSpreadsheetService.get($scope.readSpreadsheet);
-    
-    NgMap.getMap().then(function(map) {
-      $scope.map = map;
-    });
-
-    $scope.mapIcon = function(index) {
-      if (index === $scope.itinerary.length - 1) {
-        return 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-      }
-
-      return 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
-    };
-
-    $scope.showInfo = function(evt, text) {
-      $scope.infoWindowContent = text;
-      $scope.map.showInfoWindow('info', this);
-    };
-
-    $scope.showMarkers = function() {
-      return true;
-    };
 
     $scope.routePolylinePath = function () {
       return $scope.itinerary.map(function(location) {
