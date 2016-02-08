@@ -5,7 +5,7 @@ angular.module('whereIsCaioKF')
     $scope.itinerary = [];
 
     $scope.readSpreadsheet = function(data, tabletop) {
-      $scope.itinerary = _.map(data, function(item) {
+      var itinerary = _.map(data, function(item) {
         return {
           'lat': item.Lat,
           'lng': item.Long,
@@ -13,7 +13,13 @@ angular.module('whereIsCaioKF')
           'description': item.Location + ', ' + item.Country,
           'date': item.Date
         };
-      })
+      });
+
+      itinerary = _.filter(itinerary, function(item) {
+        return new Date(item.date) <= Date.now();
+      });
+
+      $scope.itinerary = itinerary;
     };
 
     GoogleSpreadsheetService.get($scope.readSpreadsheet);
@@ -51,7 +57,7 @@ angular.module('whereIsCaioKF')
 
     $scope.lastUpdatedDate = function() {
       if ($scope.itinerary.length > 0) {
-        return moment($scope.current().date, 'DD/MM/YYYY').fromNow();
+        return moment($scope.current().date, 'YYYY-MM-DD').fromNow();
       }
       
       return '';

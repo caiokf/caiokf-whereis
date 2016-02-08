@@ -38,7 +38,7 @@ describe('App Controller', function() {
 
     it('should have a readable last updated date', function () {
       var date = new Date();
-      var lastYearDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getFullYear() - 1);
+      var lastYearDate = (date.getFullYear() - 1) + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
       scope.itinerary = [{ date: lastYearDate }];
 
@@ -106,14 +106,29 @@ describe('App Controller', function() {
 
   describe('locations google spreadsheet', function() {
     it('should set itinerary contents from spreadsheet', function() {
-      scope.readSpreadsheet([{ Lat: 1, Long: 2, Location: 'City', Country: 'Brazil', Date: undefined }]);
+      scope.readSpreadsheet([{ Lat: 1, Long: 2, Location: 'City', Country: 'Brazil', Date: '2016-01-01' }]);
 
       expect(scope.itinerary).to.deep.equal([{
         'lat': 1,
         'lng': 2,
         'latLng': '1,2',
         'description': 'City, Brazil',
-        'date': undefined
+        'date': '2016-01-01'
+      }]);
+    });
+
+    it('should not include places in the future', function() {
+      scope.readSpreadsheet([
+        { Lat: 1, Long: 2, Location: 'City', Country: 'Brazil', Date: '2016-01-01' },
+        { Lat: 1, Long: 2, Location: 'City', Country: 'Brazil', Date: '2100-01-01' },
+      ]);
+
+      expect(scope.itinerary).to.deep.equal([{
+        'lat': 1,
+        'lng': 2,
+        'latLng': '1,2',
+        'description': 'City, Brazil',
+        'date': '2016-01-01'
       }]);
     });
   });
