@@ -1,0 +1,27 @@
+@media (max-width:600px) {
+  .navbar-brand {
+    font-size: 16px;
+  }
+  .description {
+    font-size: 16px;
+    display: block;
+  }
+  .weather {
+    font-size: 10px;
+    margin-left: 0;
+  }
+
+  .current-location {
+    text-align: center;
+    width: 100%;
+    padding: 0;
+
+    .last-updated {
+      display: none;
+    }
+  }
+
+  footer {
+    display: none;
+  }
+}
