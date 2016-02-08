@@ -28,12 +28,12 @@ describe('App Controller', function() {
 
     it('should not show current location information when itinerary is empty', function() {
       scope.itinerary = [];
-      expect(scope.showCurrentLocationInfo()).to.equal(false);
+      expect(scope.hasLoadedItinerary()).to.equal(false);
     });
 
     it('should show current location information when itinerary is not empty', function() {
       scope.itinerary = ['some-location'];
-      expect(scope.showCurrentLocationInfo()).to.equal(true);
+      expect(scope.hasLoadedItinerary()).to.equal(true);
     });
 
     it('should have a readable last updated date', function () {

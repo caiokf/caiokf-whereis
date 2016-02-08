@@ -11,7 +11,7 @@ block content
               i.icon-globe
               | Where in the world is&nbsp;
               b CaioKF ?
-            div.current-location(ng-hide='!showCurrentLocationInfo()')
+            div.current-location(ng-hide='!hasLoadedItinerary()')
               span.description
                 | Currently in: {{current().description}}
               span.weather
@@ -19,7 +19,7 @@ block content
                 | {{weather.temperature}}&deg;C&nbsp; {{weather.condition}}
               span.last-updated
                 | Last Updated: {{lastUpdatedDate()}}
-        div.timeline-scroll
+        div.timeline-scroll(ng-hide='!hasLoadedItinerary()')
           slider#timeline(min='{{timeline.range.min}}', max='{{timeline.range.max}}', start='{{timeline.start}}', ng-model='timelineSelectedDate')
           div.slider-title slide me to see some movement
 

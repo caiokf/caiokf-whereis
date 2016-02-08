@@ -55,7 +55,7 @@ angular.module('whereIsCaioKF')
       });
     };
 
-    $scope.showCurrentLocationInfo = function() {
+    $scope.hasLoadedItinerary = function() {
       return $scope.itinerary.length > 0;
     };
 
