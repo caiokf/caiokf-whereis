@@ -66,8 +66,11 @@ describe('App Controller', function() {
       expect(scope.mapIcon(2)).to.contain('blue-dot');
     });
 
-    it('should always show markers', function() {
-      expect(scope.showMarkers()).to.equal(true);
+    it('should show markers prior to selected date', function() {
+      scope.timelineSelectedDate = 1;
+      expect(scope.showMarkers(0)).to.equal(true);
+      expect(scope.showMarkers(1)).to.equal(true);
+      expect(scope.showMarkers(2)).to.equal(false);
     });
   });
 
@@ -85,10 +88,21 @@ describe('App Controller', function() {
 
   describe('route polyline', function() {
     it('should be an array of coordinates from itinerary', function() {
+      scope.timelineSelectedDate = 2;
+
       scope.itinerary.push({ lat: 1, lng: 2});
       expect(scope.routePolylinePath()).to.deep.equal([[1,2]]);
 
       scope.itinerary.push({ lat: 3, lng: 4});
+      expect(scope.routePolylinePath()).to.deep.equal([[1,2],[3,4]]);
+    });
+
+    it('should only display if prior to selected date', function() {
+      scope.timelineSelectedDate = 1;
+
+      scope.itinerary.push({ lat: 1, lng: 2});
+      scope.itinerary.push({ lat: 3, lng: 4});
+      scope.itinerary.push({ lat: 5, lng: 6});
       expect(scope.routePolylinePath()).to.deep.equal([[1,2],[3,4]]);
     });
   });
@@ -130,6 +144,24 @@ describe('App Controller', function() {
         'description': 'City, Brazil',
         'date': '2016-01-01'
       }]);
+    });
+  });
+
+  describe('timeline', function() {
+    beforeEach(function () {
+      WeatherService.get = sinon.stub();
+
+      scope.itinerary.push({ description: 'first-location', date: '2015-01-01' });
+      scope.itinerary.push({ description: 'last-location', date: '2015-01-02' });
+      scope.$apply();
+    });
+
+    it('should know what is the start date', function() {
+      expect(scope.timeline.range.min).to.equal(0);
+    });
+
+    it('should know what is the end date', function() {
+      expect(scope.timeline.range.max).to.equal(1);
     });
   });
 });

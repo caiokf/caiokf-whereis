@@ -19,6 +19,8 @@ block content
                 | {{weather.temperature}}&deg;C&nbsp; {{weather.condition}}
               span.last-updated
                 | Last Updated: {{lastUpdatedDate()}}
+        div.timeline-scroll
+          slider#timeline(min='{{timeline.range.min}}', max='{{timeline.range.max}}', start='{{timeline.start}}', ng-model='timelineSelectedDate')
 
       .container-fluid
         map#itinerary-map(street-view-control='false', map-type-control='false', zoom='3' center="17, 5")
@@ -29,8 +31,8 @@ block content
             title='{{item.description}}',
             on-click='showInfo(event, item.description)',
             icon='{{mapIcon($index)}}',
-            visible='{{showMarkers()}}'
+            visible='{{showMarkers($index)}}'
           )
-          shape(name='polyline' path="{{routePolylinePath()}}" geodesic="true" stroke-color="#FF0000" stroke-opacity="1.0" stroke-weight="2")
+          shape(name='polyline' path="{{routePolylinePath($index)}}" geodesic="true" stroke-color="#FF0000" stroke-opacity="1.0" stroke-weight="2")
           info-window(id='info')
             div {{infoWindowContent}}

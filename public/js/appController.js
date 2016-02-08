@@ -3,6 +3,8 @@ angular.module('whereIsCaioKF')
   .controller('AppController', function ($scope, NgMap, WeatherService, GoogleSpreadsheetService) {
 
     $scope.itinerary = [];
+    $scope.timeline = { range: { min: 0, max: 0 } };
+    $scope.timelineSelectedDate = 0;
 
     $scope.readSpreadsheet = function(data, tabletop) {
       var itinerary = _.map(data, function(item) {
@@ -41,13 +43,15 @@ angular.module('whereIsCaioKF')
       $scope.map.showInfoWindow('info', this);
     };
 
-    $scope.showMarkers = function() {
-      return true;
+    $scope.showMarkers = function(index) {
+      return (index <= $scope.timelineSelectedDate);
     };
 
     $scope.routePolylinePath = function () {
       return $scope.itinerary.map(function(location) {
         return [location.lat, location.lng];
+      }).filter(function(location, index) {
+        return index <= $scope.timelineSelectedDate;
       });
     };
 
@@ -79,6 +83,8 @@ angular.module('whereIsCaioKF')
             code: response.query.results.channel.item.condition.code,
           };
         });
+
+        $scope.timeline.range = { min: 0, max: $scope.itinerary.length - 1 };
       }
     }, true);
   });
