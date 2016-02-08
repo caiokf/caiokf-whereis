@@ -21,6 +21,7 @@ block content
                 | Last Updated: {{lastUpdatedDate()}}
         div.timeline-scroll
           slider#timeline(min='{{timeline.range.min}}', max='{{timeline.range.max}}', start='{{timeline.start}}', ng-model='timelineSelectedDate')
+          div.slider-title slide me to see some movement
 
       .container-fluid
         map#itinerary-map(street-view-control='false', map-type-control='false', zoom='3' center="17, 5")
