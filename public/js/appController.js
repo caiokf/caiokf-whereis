@@ -3,7 +3,7 @@ angular.module('whereIsCaioKF')
   .controller('AppController', function ($scope, NgMap, WeatherService, GoogleSpreadsheetService) {
 
     $scope.itinerary = [];
-    $scope.timeline = { range: { min: 0, max: 0 } };
+    $scope.timeline = { range: { min: 0, max: 1 } };
     $scope.timelineSelectedDate = 0;
 
     $scope.readSpreadsheet = function(data, tabletop) {
