@@ -1,15 +1,46 @@
 angular.module('whereIsCaioKF')
 
   .controller('AppController', function ($scope, NgMap, WeatherService, GoogleSpreadsheetService) {
+    $scope.readSpreadsheet = readSpreadsheet;
+    $scope.mapIcon = mapIcon;
+    $scope.showInfo = showInfo;
+    $scope.showMarkers = showMarkers;
+    $scope.routePolylinePath = routePolylinePath;
+    $scope.hasLoadedItinerary = hasLoadedItinerary
+    $scope.lastUpdatedDate = lastUpdatedDate;
+    $scope.current = current;
 
-    $scope.itinerary = [];
-    $scope.timeline = { range: { min: 0, max: 1 } };
-    $scope.timelineSelectedDate = 0;
+    (function activate() {
+      $scope.itinerary = [];
+      $scope.timeline = { range: { min: 0, max: 1 } };
+      $scope.timelineSelectedDate = 0;
 
-    $scope.readSpreadsheet = function(data, tabletop) {
+      GoogleSpreadsheetService
+        .get((data) => $scope.readSpreadsheet(data))
+        .then((data) => NgMap.getMap())
+        .then((map) => {
+          $scope.map = map;
+        });
+
+      $scope.$watch('itinerary', function (newValue, oldValue) {
+        if (newValue.length > 0) {
+          WeatherService.get($scope.current().description, function(response) {
+            $scope.weather = {
+              temperature: response.query.results.channel.item.condition.temp,
+              condition: response.query.results.channel.item.condition.text,
+              code: response.query.results.channel.item.condition.code,
+            };
+          });
+
+          $scope.timeline.range = { min: 0, max: $scope.itinerary.length - 1 };
+        }
+      }, true);
+    }());
+
+    function readSpreadsheet(data) {
       var itinerary = _.map(data, (x) => {
         return {
-          'lat': x.Lat,
+          'lat': x.Lati,
           'lng': x.Long,
           'latLng': x.Lat + ',' + x.Long,
           'description': x.Location + ', ' + x.Country,
@@ -24,13 +55,7 @@ angular.module('whereIsCaioKF')
       $scope.itinerary = itinerary;
     };
 
-    GoogleSpreadsheetService.get($scope.readSpreadsheet);
-
-    NgMap.getMap().then(function(map) {
-      $scope.map = map;
-    });
-
-    $scope.mapIcon = function(index) {
+    function mapIcon(index) {
       if (index === $scope.itinerary.length - 1) {
         return 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png';
       }
@@ -38,16 +63,16 @@ angular.module('whereIsCaioKF')
       return 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
     };
 
-    $scope.showInfo = function(evt, text) {
+    function showInfo(evt, text) {
       $scope.infoWindowContent = text;
       $scope.map.showInfoWindow('info', this);
     };
 
-    $scope.showMarkers = function(index) {
+    function showMarkers(index) {
       return (index <= $scope.timelineSelectedDate);
     };
 
-    $scope.routePolylinePath = function () {
+    function routePolylinePath() {
       return $scope.itinerary.map(function(location) {
         return [location.lat, location.lng];
       }).filter(function(location, index) {
@@ -55,11 +80,11 @@ angular.module('whereIsCaioKF')
       });
     };
 
-    $scope.hasLoadedItinerary = function() {
+    function hasLoadedItinerary() {
       return $scope.itinerary.length > 0;
     };
 
-    $scope.lastUpdatedDate = function() {
+    function lastUpdatedDate() {
       if ($scope.itinerary.length > 0) {
         return moment($scope.current().date, 'YYYY-MM-DD').fromNow();
       }
@@ -67,24 +92,10 @@ angular.module('whereIsCaioKF')
       return '';
     };
 
-    $scope.current = function () {
+    function current() {
       if ($scope.itinerary.length > 0) {
         return $scope.itinerary[$scope.itinerary.length - 1];
       }
       return undefined;
     };
-
-    $scope.$watch('itinerary', function (newValue, oldValue) {
-      if (newValue.length > 0) {
-        WeatherService.get($scope.current().description, function(response) {
-          $scope.weather = {
-            temperature: response.query.results.channel.item.condition.temp,
-            condition: response.query.results.channel.item.condition.text,
-            code: response.query.results.channel.item.condition.code,
-          };
-        });
-
-        $scope.timeline.range = { min: 0, max: $scope.itinerary.length - 1 };
-      }
-    }, true);
   });
