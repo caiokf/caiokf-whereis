@@ -8,6 +8,7 @@ angular.module('whereIsCaioKF')
     $scope.routePolylinePath = routePolylinePath;
     $scope.hasLoadedItinerary = hasLoadedItinerary
     $scope.lastUpdatedDate = lastUpdatedDate;
+    $scope.fetchWeatherInformation = fetchWeatherInformation;
     $scope.current = current;
 
     (function activate() {
@@ -18,23 +19,21 @@ angular.module('whereIsCaioKF')
       GoogleSpreadsheetService
         .get()
         .then((data) => $scope.readSpreadsheet(data))
-        .then((data) => NgMap.getMap())
-        .then((map) => $scope.map = map);
-
-      $scope.$watch('itinerary', function (newValue, oldValue) {
-        if (newValue.length > 0) {
-          WeatherService.get($scope.current().description, function(response) {
-            $scope.weather = {
-              temperature: response.query.results.channel.item.condition.temp,
-              condition: response.query.results.channel.item.condition.text,
-              code: response.query.results.channel.item.condition.code,
-            };
-          });
-
-          $scope.timeline.range = { min: 0, max: $scope.itinerary.length - 1 };
-        }
-      }, true);
+        .then((data) => NgMap.getMap('itinerary-map'))
+        .then((map) => $scope.map = map)
+        .then(() => $scope.fetchWeatherInformation())
+        .then(() => $scope.timeline.range = { min: 0, max: $scope.itinerary.length - 1 });
     }());
+
+    function fetchWeatherInformation() {
+      WeatherService.get($scope.current().description, function(response) {
+        $scope.weather = {
+          temperature: response.query.results.channel.item.condition.temp,
+          condition: response.query.results.channel.item.condition.text,
+          code: response.query.results.channel.item.condition.code,
+        };
+      });
+    };
 
     function readSpreadsheet(data) {
       var itinerary = _.map(data, (x) => {
