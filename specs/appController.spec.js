@@ -74,18 +74,6 @@ describe('App Controller', function() {
     });
   });
 
-  describe('weather', function() {
-    it('should call weather service when itinerary changes', function() {
-      var mock = sinon.mock(WeatherService);
-      mock.expects('get').once();
-
-      scope.itinerary.push('any-location-should-trigger-weather-service');
-      scope.$apply();
-      
-      mock.verify();
-    });
-  });
-
   describe('route polyline', function() {
     it('should be an array of coordinates from itinerary', function() {
       scope.timelineSelectedDate = 2;
