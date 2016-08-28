@@ -16,11 +16,10 @@ angular.module('whereIsCaioKF')
       $scope.timelineSelectedDate = 0;
 
       GoogleSpreadsheetService
-        .get((data) => $scope.readSpreadsheet(data))
+        .get()
+        .then((data) => $scope.readSpreadsheet(data))
         .then((data) => NgMap.getMap())
-        .then((map) => {
-          $scope.map = map;
-        });
+        .then((map) => $scope.map = map);
 
       $scope.$watch('itinerary', function (newValue, oldValue) {
         if (newValue.length > 0) {
@@ -40,7 +39,7 @@ angular.module('whereIsCaioKF')
     function readSpreadsheet(data) {
       var itinerary = _.map(data, (x) => {
         return {
-          'lat': x.Lati,
+          'lat': x.Lat,
           'lng': x.Long,
           'latLng': x.Lat + ',' + x.Long,
           'description': x.Location + ', ' + x.Country,
@@ -73,11 +72,10 @@ angular.module('whereIsCaioKF')
     };
 
     function routePolylinePath() {
-      return $scope.itinerary.map(function(location) {
-        return [location.lat, location.lng];
-      }).filter(function(location, index) {
-        return index <= $scope.timelineSelectedDate;
-      });
+      return _.chain($scope.itinerary)
+        .map((location) => [location.lat, location.lng])
+        .filter((location, i) => i <= $scope.timelineSelectedDate)
+        .value();
     };
 
     function hasLoadedItinerary() {

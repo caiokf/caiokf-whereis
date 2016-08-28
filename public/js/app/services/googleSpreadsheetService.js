@@ -3,12 +3,20 @@ angular.module('whereIsCaioKF')
     var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheet/pub?hl=en_US&hl=en_US&key=1ujZWyJk4CftjJtZqPINWhbtKwCBR8QMQ2d3uMoK7zvU&output=html';
 
     return {
-      get: function(successCallback) {
-        Tabletop.init({ 
+      get: function() {
+        var deferred = $q.defer();
+
+        var callback = (data) => {
+          deferred.resolve(data);
+        };
+
+        Tabletop.init({
           key: publicSpreadsheetUrl,
-          callback: successCallback,
-          simpleSheet: true 
+          callback: callback,
+          simpleSheet: true
         });
+
+        return deferred.promise;
       }
     };
   });
