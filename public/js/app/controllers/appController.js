@@ -7,13 +7,13 @@ angular.module('whereIsCaioKF')
     $scope.timelineSelectedDate = 0;
 
     $scope.readSpreadsheet = function(data, tabletop) {
-      var itinerary = _.map(data, function(item) {
+      var itinerary = _.map(data, (x) => {
         return {
-          'lat': item.Lat,
-          'lng': item.Long,
-          'latLng': item.Lat + ',' + item.Long,
-          'description': item.Location + ', ' + item.Country,
-          'date': item.Date
+          'lat': x.Lat,
+          'lng': x.Long,
+          'latLng': x.Lat + ',' + x.Long,
+          'description': x.Location + ', ' + x.Country,
+          'date': x.Date
         };
       });
 
