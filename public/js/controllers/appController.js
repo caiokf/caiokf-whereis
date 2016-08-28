@@ -25,7 +25,7 @@ angular.module('whereIsCaioKF')
     };
 
     GoogleSpreadsheetService.get($scope.readSpreadsheet);
-    
+
     NgMap.getMap().then(function(map) {
       $scope.map = map;
     });
@@ -63,7 +63,7 @@ angular.module('whereIsCaioKF')
       if ($scope.itinerary.length > 0) {
         return moment($scope.current().date, 'YYYY-MM-DD').fromNow();
       }
-      
+
       return '';
     };
 
